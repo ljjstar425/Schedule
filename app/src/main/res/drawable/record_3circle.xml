@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 바깥 원 (가장 큰 링) -->
+    <item android:gravity="center">
+        <shape android:shape="oval">
+            <size android:width="160dp" android:height="160dp"/>
+            <stroke android:width="3dp" android:color="#33006E93"/> <!-- 연한 블루 -->
+            <solid android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- 중간 원 -->
+    <item android:gravity="center">
+        <shape android:shape="oval">
+            <size android:width="130dp" android:height="130dp"/>
+            <stroke android:width="3dp" android:color="#66006E93"/> <!-- 중간 강도 -->
+            <solid android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- 안쪽 원 -->
+    <item android:gravity="center">
+        <shape android:shape="oval">
+            <size android:width="100dp" android:height="100dp"/>
+            <stroke android:width="3dp" android:color="#99006E93"/> <!-- 가장 진함 -->
+            <solid android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+
+</layer-list>

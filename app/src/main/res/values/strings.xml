@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">voiceday</string>
+    <string name="down_arrow">펼치기</string>
+    <string name="add_event">일정 추가</string>
+    <string name="back">뒤로 가기</string>
+    <string name="record">녹음 시작</string>
+    <string name="cancel">녹음 취소</string>
+    <string name="submit">녹음 완료 및 일정추가페이지로 이동</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/day_panel_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <!-- 가운데 뜨는 카드뷰 -->
+    <androidx.cardview.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/day_panel"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:layout_margin="24dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- 왼쪽 큰 날짜 (예: 11) -->
+            <TextView
+                android:id="@+id/panel_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <!-- 요일 (예: 화요일) -->
+            <TextView
+                android:id="@+id/panel_weekday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/panel_day"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                android:text="0요일"
+                android:textSize="16sp" />
+
+            <!-- 위에 얇은 구분 선 -->
+            <View
+                android:id="@+id/panel_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/panel_day"
+                android:layout_marginTop="12dp"
+                android:background="#DDDDDD" />
+
+
+            <!-- 일정 리스트  -->
+            <ScrollView
+            android:id="@+id/schedule_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@id/panel_divider"
+            android:layout_above="@id/btn_add_event"
+            android:layout_marginTop="12dp">
+
+                <LinearLayout
+                    android:id="@+id/schedule_list_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+
+
+
+            <!-- 오른쪽 아래 + 버튼 -->
+            <ImageButton
+                android:id="@+id/btn_add_event"
+                android:src="@drawable/ic_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/add_event"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

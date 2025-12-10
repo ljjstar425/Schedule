@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "774420860350",
+    "project_id": "user-interface-class",
+    "storage_bucket": "user-interface-class.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774420860350:android:4c5023d7abba9f418d3def",
+        "android_client_info": {
+          "package_name": "com.bar.voiceday"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBElSrYK_qEm-5P7LHhiF0YK4R5GKLizSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774420860350:android:f158e33d9b41b9ed8d3def",
+        "android_client_info": {
+          "package_name": "com.example.my_practise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBElSrYK_qEm-5P7LHhiF0YK4R5GKLizSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

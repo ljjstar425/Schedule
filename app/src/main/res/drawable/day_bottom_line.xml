@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 전체 배경: 투명 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <!-- 맨 아래 1dp 회색줄 -->
+    <item android:gravity="bottom">
+        <shape android:shape="rectangle">
+            <size android:height="1dp" />
+            <solid android:color="#E0E0E0" />
+        </shape>
+    </item>
+
+</layer-list>

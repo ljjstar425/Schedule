@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:id="@+id/year_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0000년 00월"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"/>
+            <ImageButton
+                android:id="@+id/down_arrow"
+                android:src="@drawable/down_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="27dp"
+                android:layout_marginHorizontal="5dp"
+                android:contentDescription="@string/down_arrow"/>
+        </LinearLayout>
+
+        <!-- 색상소개 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:theme="@style/CalenderViewCustom"
+                app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
+                app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+                app:mcv_headerTextAppearance="@style/CalendarWidgetHeader"
+                app:mcv_firstDayOfWeek="sunday"
+                app:mcv_selectionColor="#8062C6C4"
+                app:mcv_showOtherDates="none"/>
+
+            <!-- 달력 위, 오른쪽에 겹쳐지는 범례 -->
+            <LinearLayout
+                android:id="@+id/calendar_legend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignTop="@id/calendarView"
+                android:layout_alignEnd="@id/calendarView"
+                android:layout_marginTop="-15dp"
+                android:layout_marginEnd="15dp"
+                android:padding="4dp">
+
+                <!-- 1개: 파랑 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/legend_dot"
+                        android:backgroundTint="#3182F7" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1개"
+                        android:textSize="12sp"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <!-- 2개: 연두 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/legend_dot"
+                        android:backgroundTint="#7FD364" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2개"
+                        android:textSize="12sp"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <!-- 3개: 주황 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/legend_dot"
+                        android:backgroundTint="#FF9D3B" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3개"
+                        android:textSize="12sp"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <!-- 4개 이상: 빨강 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/legend_dot"
+                        android:backgroundTint="#FF4B4B" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4개 이상"
+                        android:textSize="12sp"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <include layout="@layout/day_schedule" />
+</FrameLayout>
