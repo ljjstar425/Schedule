@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VoiceDay03">
         <activity
+            android:name=".AddSiteActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeFragment2"
             android:exported="false" />
         <activity

@@ -80,6 +80,13 @@ public class HomeFragment extends Fragment {
         sitesAdapter = new SitesAdapter();
         sitesRecyclerView.setAdapter(sitesAdapter);
 
+        // + 버튼 클릭 리스너 추가
+        TextView addSiteButton = view.findViewById(R.id.addSiteButton);
+        addSiteButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddSiteActivity.class);
+            startActivity(intent);
+        });
+
         loadTodaySchedules();
         loadFrequentSites();
     }
