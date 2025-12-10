@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 선택된 상태 -->
+    <item android:color="#000000" android:state_checked="true" />
+    <!-- 선택되지 않은 상태 -->
+    <item android:color="#999999" />
+</selector>

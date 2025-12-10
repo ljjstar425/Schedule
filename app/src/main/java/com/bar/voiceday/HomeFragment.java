@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -34,6 +37,9 @@ public class HomeFragment extends Fragment {
     private RecyclerView sitesRecyclerView;
     private ScheduleAdapter scheduleAdapter;
     private SitesAdapter sitesAdapter;
+    private LinearLayout weekDatesLayout;
+    private TextView userNameText;
+    private TextView currentMonthText;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -51,6 +57,7 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -63,6 +70,15 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         db = FirebaseFirestore.getInstance();
+
+        // 현재 월 표시
+        currentMonthText = view.findViewById(R.id.currentMonthText);
+        SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy년 MM월", Locale.KOREAN);
+        currentMonthText.setText(monthFormat.format(new Date()));
+
+        // 주간 날짜 표시
+        weekDatesLayout = view.findViewById(R.id.weekDatesLayout);
+        setupWeekDates();
 
         // 오늘의 일정 RecyclerView 설정
         scheduleRecyclerView = view.findViewById(R.id.scheduleRecyclerView);
@@ -89,6 +105,67 @@ public class HomeFragment extends Fragment {
 
         loadTodaySchedules();
         loadFrequentSites();
+    }
+
+    private void setupWeekDates() {
+        weekDatesLayout.removeAllViews();
+
+        Calendar calendar = Calendar.getInstance();
+
+        // 이번 주 일요일로 이동
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        calendar.add(Calendar.DAY_OF_MONTH, -(dayOfWeek - 1));
+
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+
+        // 7일 생성 (일요일부터 토요일까지)
+        for (int i = 0; i < 7; i++) {
+            View dateView = createDateView(calendar, today, currentMonth);
+            weekDatesLayout.addView(dateView);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+    }
+
+    private View createDateView(Calendar calendar, int today, int currentMonth) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LinearLayout dateLayout = new LinearLayout(getContext());
+        dateLayout.setOrientation(LinearLayout.VERTICAL);
+        dateLayout.setGravity(android.view.Gravity.CENTER);
+        dateLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1.0f
+        ));
+        dateLayout.setPadding(8, 8, 8, 8);
+
+        // 날짜 TextView
+        TextView dateText = new TextView(getContext());
+        int date = calendar.get(Calendar.DAY_OF_MONTH);
+        dateText.setText(String.valueOf(date));
+        dateText.setTextSize(16);
+        dateText.setGravity(android.view.Gravity.CENTER);
+
+        // 오늘 날짜 스타일링
+        boolean isToday = (date == today && calendar.get(Calendar.MONTH) == currentMonth);
+        if (isToday) {
+            // 오늘 날짜는 파란 원형 배경
+            dateText.setTextColor(0xFFFFFFFF); // 흰색
+            dateText.setBackgroundResource(R.drawable.bg_today_circle);
+            int padding = dpToPx(8);
+            dateText.setPadding(padding, padding, padding, padding);
+        } else {
+            dateText.setTextColor(0xFF000000); // 검은색
+        }
+
+        dateLayout.addView(dateText);
+
+        return dateLayout;
+    }
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
     }
 
     private void loadTodaySchedules() {
@@ -348,6 +425,7 @@ public class HomeFragment extends Fragment {
     public static class SitesAdapter extends RecyclerView.Adapter<SitesAdapter.SiteViewHolder> {
 
         private List<FrequentSite> sites = new ArrayList<>();
+        private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         public void submitList(List<FrequentSite> list) {
             this.sites = list;
@@ -364,7 +442,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull SiteViewHolder holder, int position) {
-            holder.bind(sites.get(position));
+            holder.bind(sites.get(position), db);
         }
 
         @Override
@@ -382,21 +460,97 @@ public class HomeFragment extends Fragment {
                 siteName = itemView.findViewById(R.id.siteName);
             }
 
-            public void bind(FrequentSite site) {
+            public void bind(FrequentSite site, FirebaseFirestore db) {
                 siteName.setText(site.title);
 
-                // Glide 또는 다른 이미지 로딩 라이브러리 사용
-                // Glide.with(itemView.getContext())
-                //     .load(site.imageUrl)
-                //     .placeholder(R.drawable.ic_website_placeholder)
-                //     .into(siteImage);
+                // 웹사이트 미리보기 이미지 로드
+                loadWebsitePreview(site);
 
                 itemView.setOnClickListener(v -> {
                     if (!site.url.isEmpty()) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(site.url));
-                        itemView.getContext().startActivity(intent);
+                        // 방문 횟수 증가
+                        incrementVisitCount(site.id, db);
+
+                        // URL로 이동
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(site.url));
+                            itemView.getContext().startActivity(intent);
+                        } catch (Exception e) {
+                            Toast.makeText(itemView.getContext(),
+                                    "링크를 열 수 없습니다: " + site.url,
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
+            }
+
+            private void loadWebsitePreview(FrequentSite site) {
+                // 이미 저장된 이미지 URL이 있으면 사용
+                if (site.imageUrl != null && !site.imageUrl.isEmpty()) {
+                    Glide.with(itemView.getContext())
+                            .load(site.imageUrl)
+                            .placeholder(R.drawable.ic_person_hello)
+                            .error(R.drawable.ic_person_hello)
+                            .into(siteImage);
+                } else {
+                    // 웹사이트 스크린샷 API 사용
+                    String screenshotUrl = getScreenshotUrl(site.url);
+
+                    Glide.with(itemView.getContext())
+                            .load(screenshotUrl)
+                            .placeholder(R.drawable.ic_person_hello)
+                            .error(R.drawable.ic_person_hello)
+                            .into(siteImage);
+                }
+            }
+
+            private String getScreenshotUrl(String websiteUrl) {
+                // URL 인코딩
+                String encodedUrl = Uri.encode(websiteUrl);
+
+                // 여러 스크린샷 API 옵션 중 하나 선택
+                // 옵션 1: API Flash (무료 티어 제공)
+                // return "https://api.apiflash.com/v1/urltoimage?access_key=YOUR_KEY&url=" + encodedUrl;
+
+                // 옵션 2: ScreenshotAPI (무료)
+                // return "https://shot.screenshotapi.net/screenshot?url=" + encodedUrl + "&width=300&height=300";
+
+                // 옵션 3: Google PageSpeed Insights API (무료)
+                // return "https://www.google.com/s2/favicons?domain=" + websiteUrl + "&sz=128";
+
+                // 옵션 4: 간단한 파비콘 사용 (가장 안정적)
+                return "https://www.google.com/s2/favicons?domain=" + extractDomain(websiteUrl) + "&sz=128";
+
+                // 옵션 5: Screenshot Machine (무료 제한적)
+                // return "https://api.screenshotmachine.com?key=YOUR_KEY&url=" + encodedUrl + "&dimension=300x300";
+            }
+
+            private String extractDomain(String url) {
+                try {
+                    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                        url = "https://" + url;
+                    }
+                    Uri uri = Uri.parse(url);
+                    return uri.getHost();
+                } catch (Exception e) {
+                    return url;
+                }
+            }
+
+            private void incrementVisitCount(String siteId, FirebaseFirestore db) {
+                db.collection("frequentSites")
+                        .document(siteId)
+                        .get()
+                        .addOnSuccessListener(document -> {
+                            if (document.exists()) {
+                                Long currentCount = document.getLong("visitCount");
+                                int newCount = (currentCount != null ? currentCount.intValue() : 0) + 1;
+
+                                db.collection("frequentSites")
+                                        .document(siteId)
+                                        .update("visitCount", newCount);
+                            }
+                        });
             }
         }
     }

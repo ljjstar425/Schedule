@@ -56,13 +56,14 @@ public class MainActivity extends AppCompatActivity {
 
 //                // Timetable 화면
 //                if (itemId == R.id.page_3) {
-//                    transferTo(PlacesFragment.newInstance("param1", "param2"));
+//                    transferTo(TimetableFragment.newInstance("param1", "param2"));
 //                    return true;
 //                }
 //
                   // Club 화면
 //                if (itemId == R.id.page_4) {
-//                    transferTo(NewsFragment.newInstance("param1", "param2"));
+//                    Intent intent = new Intent(MainActivity.this, ClubActivity.class);
+//                    startActivity(intent);
 //                    return true;
 //                }
 

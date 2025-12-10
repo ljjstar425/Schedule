@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">  <!-- rectangle가 아닌 oval로 변경 -->
+    <solid android:color="#2196F3" />  <!-- 파란색 배경 -->
+    <size
+        android:width="40dp"
+        android:height="40dp" />  <!-- 정사각형 크기로 설정하면 완전한 원 -->
+</shape>
